@@ -32,6 +32,8 @@ public final class AttestationHooks {
 
     private static final String PRODUCT_STOCK_FINGERPRINT =
             SystemProperties.get("ro.build.stock_fingerprint");
+    private static final String PRODUCT_STOCK_SECURITY_PATCH =
+            SystemProperties.get("ro.build.version.stock_security_patch");
 
     private static volatile boolean sIsGms = false;
 
@@ -54,11 +56,13 @@ public final class AttestationHooks {
     }
 
     private static void spoofBuildGms() {
-        // Set fingerprint for SafetyNet CTS profile
+        // Set fingerprint and security patch for SafetyNet CTS profile
         if (PRODUCT_STOCK_FINGERPRINT.length() > 0) {
             setBuildField("FINGERPRINT", PRODUCT_STOCK_FINGERPRINT);
         }
-
+        if (PRODUCT_STOCK_SECURITY_PATCH.length() > 0) {
+            setBuildField("VERSION.SECURITY_PATCH", PRODUCT_STOCK_SECURITY_PATCH);
+        }
         // Alter model name to avoid hardware attestation enforcement
         setBuildField("MODEL", Build.MODEL + " ");
     }
